@@ -1,8 +1,19 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/GdAyo19/FundsFlow/config"
+	"github.com/GdAyo19/FundsFlow/models"
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
+
+	config.ConnectDataBase()
+
+	config.DB.AutoMigrate(
+		&models.User{},
+	)
+
 	router := gin.Default()
 
 	router.GET("/", func(c *gin.Context) {
