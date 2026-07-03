@@ -23,6 +23,10 @@ func SetUpRoutes(router *gin.Engine) {
 	{
 		protected.GET("/profile", controllers.Profile)
 		protected.POST("/transactions", controllers.CreateTransaction)
+		protected.GET("/transactions", controllers.GetTransactions)
+		protected.PUT("/transactions/:id", controllers.UpdateTransaction)
+		protected.DELETE("/transactions/:id", controllers.DeleteTransaction)
+	
 	}
 
 }
