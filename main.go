@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/GdAyo19/FundsFlow/config"
 	"github.com/GdAyo19/FundsFlow/models"
+	"github.com/GdAyo19/FundsFlow/routes"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,15 +13,12 @@ func main() {
 
 	config.DB.AutoMigrate(
 		&models.User{},
+		&models.Transaction{},
 	)
 
 	router := gin.Default()
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Funds Flow API Running 🚀",
-		})
-	})
+	routes.SetUpRoutes(router)
 
 	router.Run(":8080")
 
