@@ -1,0 +1,347 @@
+openapi: "3.0.0"
+info:
+  title: FundsFlow API
+  description: Personal finance management API
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+    description: Local development
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []
+
+paths:
+  /api/auth/register:
+    post:
+      tags: [Authentication]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                email: { type: string }
+                password: { type: string }
+      responses:
+        "201": { description: User created }
+        "400": { description: Invalid data }
+
+  /api/auth/login:
+    post:
+      tags: [Authentication]
+      summary: Login and get JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        "200": { description: Login successful }
+        "400": { description: Invalid credentials }
+
+  /api/auth/users:
+    get:
+      tags: [Authentication]
+      summary: List all users
+      responses:
+        "200": { description: List of users }
+
+  /api/profile:
+    get:
+      tags: [Users]
+      summary: Get current user profile
+      responses:
+        "200": { description: User profile }
+
+  /api/transactions:
+    post:
+      tags: [Transactions]
+      summary: Create a transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type: { type: string, enum: [income, expense] }
+                amount: { type: number }
+                category: { type: string }
+                description: { type: string }
+      responses:
+        "201": { description: Transaction created }
+    get:
+      tags: [Transactions]
+      summary: Get user transactions
+      responses:
+        "200": { description: List of transactions }
+
+  /api/transactions/{id}:
+    put:
+      tags: [Transactions]
+      summary: Update a transaction
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Transaction updated }
+    delete:
+      tags: [Transactions]
+      summary: Delete a transaction
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Transaction deleted }
+
+  /api/budgets:
+    post:
+      tags: [Budgets]
+      summary: Create a budget
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category: { type: string }
+                amount: { type: number }
+                month: { type: integer, minimum: 1, maximum: 12 }
+                year: { type: integer }
+      responses:
+        "201": { description: Budget created }
+    get:
+      tags: [Budgets]
+      summary: Get user budgets
+      responses:
+        "200": { description: List of budgets }
+
+  /api/budgets/{id}:
+    put:
+      tags: [Budgets]
+      summary: Update a budget
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Budget updated }
+    delete:
+      tags: [Budgets]
+      summary: Delete a budget
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Budget deleted }
+
+  /api/goals:
+    post:
+      tags: [Savings Goals]
+      summary: Create a savings goal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                target_amount: { type: number }
+                deadline: { type: string, format: date }
+      responses:
+        "201": { description: Goal created }
+    get:
+      tags: [Savings Goals]
+      summary: Get user savings goals
+      responses:
+        "200": { description: List of goals }
+
+  /api/goals/{id}:
+    put:
+      tags: [Savings Goals]
+      summary: Update a savings goal
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Goal updated }
+    delete:
+      tags: [Savings Goals]
+      summary: Delete a savings goal
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Goal deleted }
+
+  /api/goals/{id}/contributions:
+    post:
+      tags: [Savings Goals]
+      summary: Add contribution to a goal
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount: { type: number }
+                note: { type: string }
+      responses:
+        "200": { description: Contribution added }
+
+  /api/goals/{id}/contributions/{contributionId}:
+    delete:
+      tags: [Savings Goals]
+      summary: Delete a contribution
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+        - in: path
+          name: contributionId
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Contribution deleted }
+
+  /api/dashboard:
+    get:
+      tags: [Dashboard]
+      summary: Financial summary dashboard
+      responses:
+        "200": { description: Dashboard data }
+
+  /api/reports/monthly:
+    get:
+      tags: [Reports]
+      summary: Monthly financial report
+      parameters:
+        - in: query
+          name: month
+          schema: { type: integer }
+        - in: query
+          name: year
+          schema: { type: integer }
+      responses:
+        "200": { description: Monthly report }
+
+  /api/reports/category:
+    get:
+      tags: [Reports]
+      summary: Category report
+      parameters:
+        - in: query
+          name: category
+          required: true
+          schema: { type: string }
+        - in: query
+          name: month
+          schema: { type: integer }
+        - in: query
+          name: year
+          schema: { type: integer }
+      responses:
+        "200": { description: Category report }
+
+  /api/reports/export/csv:
+    get:
+      tags: [Reports]
+      summary: Export transactions as CSV
+      responses:
+        "200": { description: CSV file }
+
+  /api/reports/export/pdf:
+    get:
+      tags: [Reports]
+      summary: Export transactions as PDF (HTML)
+      responses:
+        "200": { description: HTML file }
+
+  /api/recurring-transactions:
+    post:
+      tags: [Recurring Transactions]
+      summary: Create a recurring transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type: { type: string, enum: [income, expense] }
+                amount: { type: number }
+                category: { type: string }
+                description: { type: string }
+                frequency: { type: string, enum: [daily, weekly, monthly] }
+                start_date: { type: string, format: date }
+                end_date: { type: string, format: date }
+      responses:
+        "201": { description: Recurring transaction created }
+    get:
+      tags: [Recurring Transactions]
+      summary: Get recurring transactions
+      responses:
+        "200": { description: List of recurring transactions }
+
+  /api/recurring-transactions/{id}:
+    put:
+      tags: [Recurring Transactions]
+      summary: Update a recurring transaction
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Recurring transaction updated }
+    delete:
+      tags: [Recurring Transactions]
+      summary: Delete a recurring transaction
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Recurring transaction deleted }
+
+  /api/notifications:
+    get:
+      tags: [Notifications]
+      summary: Get notifications
+      responses:
+        "200": { description: List of notifications }

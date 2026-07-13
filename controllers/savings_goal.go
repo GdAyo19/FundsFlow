@@ -125,3 +125,57 @@ func GetSavingsGoals(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 
 }
+
+func UpdateSavingsGoal(c *gin.Context) {
+	userID := c.GetUint("userID")
+	id := c.Param("id")
+
+	var body models.SavingGoalRequest
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	deadline, err := time.Parse("2006-01-02", body.Deadline)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid deadline format. Use YYYY-MM-DD."})
+		return
+	}
+
+	var goal models.SavingsGoal
+	if err := config.DB.Where("id = ? AND user_id = ?", id, userID).First(&goal).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Savings goal not found"})
+		return
+	}
+
+	goal.Title = body.Title
+	goal.TargetAmount = body.TargetAmount
+	goal.Deadline = deadline
+
+	if err := config.DB.Save(&goal).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update savings goal"})
+		return
+	}
+
+	c.JSON(http.StatusOK, goal)
+}
+
+func DeleteSavingsGoal(c *gin.Context) {
+	userID := c.GetUint("userID")
+	id := c.Param("id")
+
+	var goal models.SavingsGoal
+	if err := config.DB.Where("id = ? AND user_id = ?", id, userID).First(&goal).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Savings goal not found"})
+		return
+	}
+
+	config.DB.Where("goal_id = ?", goal.ID).Delete(&models.GoalContribution{})
+
+	if err := config.DB.Delete(&goal).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete savings goal"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Savings goal deleted successfully"})
+}

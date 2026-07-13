@@ -97,3 +97,50 @@ func GetBudgets(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 
 }
+
+func UpdateBudget(c *gin.Context) {
+	userID := c.GetUint("userID")
+	id := c.Param("id")
+
+	var body models.BudgetRequest
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	var budget models.Budget
+	if err := config.DB.Where("id = ? AND user_id = ?", id, userID).First(&budget).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Budget not found"})
+		return
+	}
+
+	budget.Category = body.Category
+	budget.Amount = body.Amount
+	budget.Month = body.Month
+	budget.Year = body.Year
+
+	if err := config.DB.Save(&budget).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update budget"})
+		return
+	}
+
+	c.JSON(http.StatusOK, budget)
+}
+
+func DeleteBudget(c *gin.Context) {
+	userID := c.GetUint("userID")
+	id := c.Param("id")
+
+	var budget models.Budget
+	if err := config.DB.Where("id = ? AND user_id = ?", id, userID).First(&budget).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Budget not found"})
+		return
+	}
+
+	if err := config.DB.Delete(&budget).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete budget"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Budget deleted successfully"})
+}

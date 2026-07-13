@@ -57,4 +57,22 @@ func AddContribution(c *gin.Context) {
 	c.JSON(http.StatusOK, contribution)
 }
 
+func DeleteContribution(c *gin.Context) {
+	userID := c.GetUint("userID")
+	contributionID := c.Param("contributionId")
+
+	var contribution models.GoalContribution
+	if err := config.DB.Where("id = ? AND user_id = ?", contributionID, userID).First(&contribution).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Contribution not found"})
+		return
+	}
+
+	if err := config.DB.Delete(&contribution).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete contribution"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Contribution deleted successfully"})
+}
+
 
