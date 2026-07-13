@@ -26,7 +26,15 @@ func SetUpRoutes(router *gin.Engine) {
 		protected.GET("/transactions", controllers.GetTransactions)
 		protected.PUT("/transactions/:id", controllers.UpdateTransaction)
 		protected.DELETE("/transactions/:id", controllers.DeleteTransaction)
-	
+		protected.POST("/budgets", controllers.CreateBudget)
+		protected.GET("/budgets", controllers.GetBudgets)
+		protected.POST("/goals", controllers.CreateSavingsGoal)
+		protected.POST("/goals/:id/contributions", controllers.AddContribution)
+		protected.GET("/goals", controllers.GetSavingsGoals)
+
 	}
 
 }
+
+
+
