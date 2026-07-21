@@ -2,7 +2,7 @@
 
 > A modern personal finance management API designed to help users track their money, manage budgets, build savings habits, and gain better control over their financial future.
 
-![Status](https://img.shields.io/badge/status-in%20development-orange)
+![Status](https://img.shields.io/badge/status-core%20features%20complete-brightgreen)
 
 ---
 
@@ -24,25 +24,25 @@ FundsFlow is being built with real-world backend engineering practices including
 
 ## 🚀 Features
 
-### 👤 User Management
+### 👤 User Management ✅
 
-* User registration
-* Secure login system
-* Password encryption
-* JWT authentication
-* Protected API routes
+* [x] User registration
+* [x] Secure login system
+* [x] Password encryption
+* [x] JWT authentication
+* [x] Protected API routes
 
 ---
 
-### 💳 Transaction Management
+### 💳 Transaction Management ✅
 
 Users can:
 
-* Add income
-* Add expenses
-* Categorize transactions
-* View transaction history
-* Edit and delete transactions
+* [x] Add income
+* [x] Add expenses
+* [x] Categorize transactions
+* [x] View transaction history
+* [x] Edit and delete transactions
 
 Example:
 
@@ -57,7 +57,7 @@ Transport - ₦10,000
 
 ---
 
-### 📊 Budget Management
+### 📊 Budget Management ✅
 
 Create budgets and control spending.
 
@@ -71,16 +71,16 @@ Transport Budget:
 ₦20,000/month
 ```
 
-The system will track:
+The system tracks:
 
-* Amount spent
-* Remaining budget
-* Spending percentage
-* Budget warnings
+* [x] Amount spent
+* [x] Remaining budget
+* [x] Spending percentage
+* [x] Budget warnings
 
 ---
 
-### 🎯 Savings Goals
+### 🎯 Savings Goals ✅
 
 Users can create saving targets.
 
@@ -97,19 +97,19 @@ Current Savings:
 ₦200,000
 ```
 
-FundsFlow will help users monitor progress toward their goals.
+FundsFlow helps users monitor progress toward their goals.
 
 ---
 
-### 📈 Financial Analytics
+### 📈 Financial Analytics ✅
 
-The API will provide financial insights such as:
+The API provides financial insights such as:
 
-* Monthly income
-* Monthly expenses
-* Saving rate
-* Most used spending categories
-* Spending trends
+* [x] Monthly income
+* [x] Monthly expenses
+* [x] Saving rate
+* [x] Most used spending categories
+* [x] Spending trends
 
 ---
 
@@ -185,11 +185,11 @@ Swagger documentation will be available after the first stable release.
 
 # 🧪 Testing
 
-The project will include:
+The project includes:
 
-* Unit tests
-* API endpoint tests
-* Database tests
+* [x] Unit tests
+* [x] API endpoint tests
+* [x] Database tests
 
 ---
 
@@ -214,6 +214,6 @@ FundsFlow is built to demonstrate real-world backend development skills:
 
 ## ⭐ Project Status
 
-Currently under active development.
+Core features are complete: user management, transactions, budgets, savings goals, and analytics are all implemented.
 
-Follow the progress as FundsFlow evolves from an idea into a complete financial management platform.
+Active development continues on the features listed under "Future Features" below.
